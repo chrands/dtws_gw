@@ -99,7 +99,7 @@ if (canvas) {
     animate();
 }
 
-// ================= 滚动监听 (Scroll Observer) =================
+// ================= 滚动监听 =================
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -116,7 +116,7 @@ document.querySelectorAll('.section').forEach(section => {
 const toggleBtn = document.getElementById('themeToggle');
 const body = document.body;
 
-// 检查本地存储的主题
+// 检查本地存储
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
     body.setAttribute('data-theme', savedTheme);
@@ -134,7 +134,7 @@ if (toggleBtn) {
     });
 }
 
-// ================= 二维码放大查看功能 =================
+// ================= 二维码模态框 =================
 const modal = document.getElementById('qrcodeModal');
 if (modal) {
     const modalImage = document.getElementById('modalImage');
@@ -159,19 +159,15 @@ if (modal) {
     }
     
     modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
-        }
+        if (e.target === modal) closeModal();
     });
     
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
+        if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
     });
 }
 
-// ================= 按钮流光效果 =================
+// ================= 按钮流光 =================
 document.querySelectorAll('.magnetic-btn').forEach(btn => {
     btn.addEventListener('mousemove', (e) => {
         const rect = btn.getBoundingClientRect();
@@ -181,3 +177,9 @@ document.querySelectorAll('.magnetic-btn').forEach(btn => {
         btn.style.setProperty('--y', y + 'px');
     });
 });
+
+// ================= 移动端菜单切换 (新增) =================
+function toggleMenu() {
+    const menu = document.querySelector('.nav-menu');
+    menu.classList.toggle('active');
+}

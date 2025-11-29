@@ -18,45 +18,33 @@
             <a href="news.html" class="nav-link">新闻媒体</a>
             <a href="contact.html" class="nav-link">联系我们</a>
         </div>
+
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+
         <div class="theme-dot" id="themeToggle"></div>
     </nav>
 
     <div class="scroll-container">
         
         <section class="section active" id="home">
-            <div class="home-content">
-                <div class="home-text">
+            <div class="home-content" style="justify-content: center; text-align: center; flex-direction: column;">
+                <div class="home-text" style="max-width: 900px; width: 100%;">
                     <h1 class="big-text">新质诊疗技术<br>传播服务商</h1>
-                    <p class="sub-text">
+                    <p class="sub-text" style="margin: 0 auto 50px auto;">
                         聚合生命健康的真正答案。稻田蛙声致力于以前沿生物技术与数字化方案，重构医疗诊断的未来边界。
                     </p>
                     <div class="magnetic-btn">探索解决方案</div>
                 </div>
-                <!-- <div class="home-qrcodes">
-                    <div class="qrcode-container">
-                        <div class="qrcode-item" onclick="openModal('assets/images/qrcodes/service-account-qr.svg', '服务号')">
-                            <img src="assets/images/qrcodes/service-account-qr.svg" alt="服务号二维码" class="qrcode-image">
-                            <p class="qrcode-label">服务号</p>
-                        </div>
-                        <div class="qrcode-item" onclick="openModal('assets/images/qrcodes/official-account-qr.svg', '公众号')">
-                            <img src="assets/images/qrcodes/official-account-qr.svg" alt="公众号二维码" class="qrcode-image">
-                            <p class="qrcode-label">公众号</p>
-                        </div>
-                        <div class="qrcode-item" onclick="openModal('assets/images/qrcodes/video-account-qr.svg', '视频号')">
-                            <img src="assets/images/qrcodes/video-account-qr.svg" alt="视频号二维码" class="qrcode-image">
-                            <p class="qrcode-label">视频号</p>
-                        </div>
-                        <div class="qrcode-item" onclick="openModal('assets/images/qrcodes/douyin-qr.svg', '抖音')">
-                            <img src="assets/images/qrcodes/douyin-qr.svg" alt="抖音二维码" class="qrcode-image">
-                            <p class="qrcode-label">抖音</p>
-                        </div>
-                    </div>
-                </div> -->
+                
+                <div class="home-visual">
+                    <div class="glow-circle"></div>
+                </div>
             </div>
             <div class="scroll-indicator">向下滚动探索</div>
         </section>
 
-        <!-- 二维码放大查看模态框 -->
         <div id="qrcodeModal" class="modal">
             <div class="modal-content">
                 <span class="close-button" onclick="closeModal()">&times;</span>
@@ -93,6 +81,12 @@
         </section>
 
         <footer class="footer">
+            <div class="footer-links" style="margin-bottom: 20px; display: flex; justify-content: center; gap: 30px;">
+                <span class="nav-link" onclick="openModal('assets/images/qrcodes/service-account-qr.svg', '服务号')" style="font-size: 14px;">关注服务号</span>
+                <span class="nav-link" onclick="openModal('assets/images/qrcodes/official-account-qr.svg', '公众号')" style="font-size: 14px;">关注公众号</span>
+                <span class="nav-link" onclick="openModal('assets/images/qrcodes/video-account-qr.svg', '视频号')" style="font-size: 14px;">关注视频号</span>
+            </div>
+
             <p>
                 © 2025 DAUTEEN. All Rights Reserved.<br>
                 <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" class="icp-link">陕ICP备2025078374号</a>

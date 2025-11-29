@@ -15,7 +15,7 @@
     /* 暗夜：深邃、生物荧光 */
     --bg-color: #050505;
     --text-main: #ffffff;
-    --text-sub: #a0b1c0; /* 提高对比度 */
+    --text-sub: #a0b1c0;
     --brand-color: #00ffea;
     --glass-bg: rgba(20, 20, 20, 0.6);
     --glass-border: rgba(255, 255, 255, 0.15);
@@ -41,6 +41,35 @@ body {
     pointer-events: none;
 }
 
+/* --- 新增：背景流动光斑 (增加层次感) --- */
+.scroll-container::before, .scroll-container::after {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: var(--brand-color);
+    filter: blur(120px);
+    opacity: 0.08; /* 淡淡的氛围光 */
+    z-index: -1;
+    animation: floatOrb 15s infinite alternate ease-in-out;
+}
+
+.scroll-container::before {
+    top: -10%; left: -10%;
+    background: radial-gradient(circle, var(--brand-color), transparent);
+}
+
+.scroll-container::after {
+    bottom: 10%; right: -5%;
+    background: radial-gradient(circle, #0099a8, transparent);
+    animation-delay: -5s;
+}
+
+@keyframes floatOrb {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(50px, 80px) scale(1.1); }
+}
+
 /* --- 2. 悬浮导航岛 (Floating Nav) --- */
 .nav-island {
     position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
@@ -57,9 +86,7 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-.nav-logo-img {
-    height: 40px; width: auto; vertical-align: middle;
-}
+.nav-logo-img { height: 40px; width: auto; vertical-align: middle; }
 
 .nav-menu { display: flex; gap: 40px; }
 
@@ -88,7 +115,11 @@ body {
 }
 [data-theme="dark"] .theme-dot::after { transform: scale(0.6); }
 
-/* --- 3. 沉浸式内容区 (Scroll Sections) --- */
+/* --- 新增：移动端汉堡菜单按钮 --- */
+.menu-toggle { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
+.menu-toggle span { width: 24px; height: 2px; background: var(--text-main); transition: 0.3s; }
+
+/* --- 3. 沉浸式内容区 --- */
 .scroll-container {
     position: relative; z-index: 1;
     min-height: 100vh;
@@ -102,15 +133,6 @@ body {
     position: relative;
 }
 
-/* 页面切换动画 */
-.page-transition {
-    animation: pageFadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-@keyframes pageFadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 /* 巨型标题排版 */
 .big-text {
     font-size: clamp(42px, 7vw, 100px);
@@ -119,232 +141,6 @@ body {
     opacity: 0; transform: translateY(50px);
     transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
     letter-spacing: 2px;
-}
-
-/* 高亮文字 */
-.highlight-text {
-    color: var(--brand-color);
-    text-shadow: 0 0 15px var(--brand-color);
-}
-
-/* 二维码展示模块 - 优化版 */
-.qrcode-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s;
-}
-
-.section.active .qrcode-container {
-    opacity: 1; transform: translateY(0);
-}
-
-.qrcode-item {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 1px solid var(--glass-border);
-    border-radius: 18px;
-    padding: 20px;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-/* 悬停流光效果 */
-.qrcode-item::before {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%; width: 200%; height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-    transform: rotate(45deg);
-    transition: 0.5s;
-    opacity: 0;
-}
-
-.qrcode-item:hover::before {
-    opacity: 1;
-    left: 100%;
-    top: 100%;
-    transition: 1s;
-}
-
-.qrcode-item:hover {
-    transform: translateY(-8px) scale(1.02);
-    border-color: var(--brand-color);
-    box-shadow: 0 15px 40px var(--card-glow);
-}
-
-.qrcode-image {
-    width: 100%; max-width: 120px; height: auto;
-    margin-bottom: 15px;
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.qrcode-item:hover .qrcode-image {
-    transform: scale(1.1);
-}
-
-.qrcode-label {
-    font-size: 16px; font-weight: 600; color: var(--text-main); margin: 0;
-}
-
-/* 首页内容布局 */
-.home-content {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 60px; width: 100%;
-}
-.home-text { flex: 1; max-width: 600px; }
-.home-qrcodes { flex: 0 0 auto; width: 360px; }
-
-/* 二维码放大查看模态框 */
-.modal {
-    display: none; position: fixed; z-index: 1000;
-    left: 0; top: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(5px);
-    opacity: 0; transition: opacity 0.3s ease;
-}
-
-.modal.active {
-    display: flex; align-items: center; justify-content: center;
-    opacity: 1;
-}
-
-.modal-content {
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 40px; border-radius: 24px;
-    text-align: center;
-    max-width: 90vw; max-height: 90vh;
-    transform: scale(0.8);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-[data-theme="dark"] .modal-content {
-    background-color: #1a1a1a;
-    border: 1px solid var(--brand-color);
-}
-
-.modal.active .modal-content {
-    transform: scale(1);
-}
-
-.modal-image {
-    max-width: 100%; max-height: 60vh; margin-bottom: 20px;
-}
-
-.modal-label {
-    font-size: 22px; font-weight: 700; color: #333;
-    margin-bottom: 10px;
-}
-[data-theme="dark"] .modal-label { color: #fff; }
-
-.close-button {
-    position: absolute; top: 15px; right: 20px;
-    font-size: 32px; font-weight: bold; cursor: pointer;
-    color: #999; transition: color 0.3s ease;
-}
-.close-button:hover { color: var(--brand-color); }
-
-/* 玻璃卡片组 */
-.cards-wrapper {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px; width: 100%; margin-top: 50px;
-}
-.glass-card {
-    background: var(--glass-bg); backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    padding: 40px; border-radius: 24px;
-    transition: all 0.4s ease;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-}
-.glass-card:hover { 
-    transform: translateY(-12px); 
-    border-color: var(--brand-color);
-    box-shadow: 0 15px 40px var(--card-glow); 
-}
-.glass-card h3 { margin-bottom: 15px; font-size: 24px; color: var(--text-main); }
-.glass-card p { color: var(--text-sub); font-size: 15px; line-height: 1.6; }
-
-/* 按钮 - 流光质感设计 */
-.magnetic-btn {
-    position: relative;
-    display: inline-flex; align-items: center; justify-content: center;
-    padding: 18px 45px; border-radius: 50px;
-    border: 1px solid var(--glass-border);
-    color: var(--text-main); font-weight: 700;
-    background: rgba(255,255,255,0.05);
-    transition: all 0.3s; cursor: pointer;
-    text-transform: uppercase; letter-spacing: 1px;
-    overflow: hidden;
-    z-index: 1;
-}
-
-/* 动态光影背景 */
-.magnetic-btn::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
-                var(--brand-color) 0%, transparent 50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    z-index: -1;
-    mix-blend-mode: overlay;
-}
-
-.magnetic-btn:hover::before {
-    opacity: 1;
-}
-
-.magnetic-btn:hover {
-    border-color: var(--brand-color);
-    color: var(--brand-color);
-    box-shadow: 0 0 20px var(--card-glow);
-    transform: translateY(-2px);
-}
-
-/* 底部 ICP 备案 */
-.footer {
-    margin-top: auto;
-    padding: 40px 0;
-    text-align: center;
-    color: var(--text-sub);
-    font-size: 14px;
-    position: relative;
-    z-index: 10;
-}
-.icp-link {
-    color: var(--text-sub);
-    text-decoration: none;
-    transition: color 0.3s;
-    border-bottom: 1px dashed transparent;
-}
-.icp-link:hover {
-    color: var(--brand-color);
-    border-bottom-color: var(--brand-color);
-}
-
-/* 移动端适配 */
-@media (max-width: 1024px) {
-    .home-content { flex-direction: column; text-align: center; gap: 40px; }
-    .home-qrcodes { width: 100%; max-width: 400px; }
-}
-
-@media (max-width: 768px) {
-    .nav-island { padding: 0 20px; height: 60px; }
-    .nav-logo-img { height: 32px; }
-    .nav-menu { display: none; } 
-    .big-text { font-size: 42px; }
-    .qrcode-container { gap: 15px; }
-    .qrcode-item { padding: 15px; }
 }
 
 .sub-text {
@@ -359,9 +155,179 @@ body {
     opacity: 1; transform: translateY(0);
 }
 
+/* 首页内容布局 */
+.home-content {
+    display: flex; align-items: center; width: 100%;
+    /* 修改：默认让视觉在后，文字在前 */
+    z-index: 2;
+}
+
+/* 新增：首页视觉装饰 (发光圆环) */
+.home-visual {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60vw; height: 60vw;
+    max-width: 600px; max-height: 600px;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 1.5s ease 0.5s;
+}
+.section.active .home-visual { opacity: 1; }
+
+.glow-circle {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 100px var(--card-glow), inset 0 0 100px var(--card-glow);
+    animation: rotateCircle 20s linear infinite;
+    position: relative;
+}
+.glow-circle::before {
+    content: ''; position: absolute; top: -2px; left: 50%; 
+    width: 10px; height: 10px; background: var(--brand-color);
+    border-radius: 50%; box-shadow: 0 0 20px var(--brand-color);
+}
+
+@keyframes rotateCircle { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+
+/* 二维码模态框 */
+.modal {
+    display: none; position: fixed; z-index: 1000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    opacity: 0; transition: opacity 0.3s ease;
+}
+.modal.active { display: flex; align-items: center; justify-content: center; opacity: 1; }
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 40px; border-radius: 24px; text-align: center;
+    transform: scale(0.8); transition: transform 0.3s;
+}
+.modal.active .modal-content { transform: scale(1); }
+.modal-image { max-width: 80vw; max-height: 60vh; }
+.close-button { position: absolute; top: 20px; right: 20px; font-size: 30px; cursor: pointer; }
+
+/* 玻璃卡片组 (优化质感) */
+.cards-wrapper {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px; width: 100%; margin-top: 50px;
+}
+.glass-card {
+    /* 修改：增强玻璃质感 */
+    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px; border-radius: 24px;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+}
+.glass-card:hover { 
+    transform: translateY(-10px); 
+    border-color: var(--brand-color);
+    box-shadow: 0 20px 50px var(--card-glow); 
+}
+.glass-card h3 { margin-bottom: 15px; font-size: 24px; color: var(--text-main); }
+.glass-card p { color: var(--text-sub); font-size: 15px; line-height: 1.6; }
+
+/* 按钮 - 流光质感 */
+.magnetic-btn {
+    position: relative; display: inline-flex; align-items: center; justify-content: center;
+    padding: 18px 45px; border-radius: 50px;
+    border: 1px solid var(--glass-border);
+    color: var(--text-main); font-weight: 700;
+    background: rgba(255,255,255,0.05);
+    transition: all 0.3s; cursor: pointer; overflow: hidden; z-index: 1;
+}
+.magnetic-btn::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), var(--brand-color) 0%, transparent 50%);
+    opacity: 0; transition: opacity 0.3s; z-index: -1; mix-blend-mode: overlay;
+}
+.magnetic-btn:hover::before { opacity: 1; }
+.magnetic-btn:hover { border-color: var(--brand-color); color: var(--brand-color); box-shadow: 0 0 20px var(--card-glow); }
+
+/* 页脚 */
+.footer {
+    margin-top: auto; padding: 60px 0; text-align: center;
+    color: var(--text-sub); font-size: 14px; z-index: 10;
+}
+.footer-links .nav-link:hover { text-decoration: underline; }
+
 .scroll-indicator {
     position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
     font-size: 12px; letter-spacing: 2px; color: var(--text-sub);
     animation: bounce 2s infinite;
 }
 @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }
+
+/* --- 移动端适配 (关键修改) --- */
+@media (max-width: 768px) {
+    .nav-island { padding: 0 20px; height: 60px; }
+    .nav-logo-img { height: 32px; }
+    
+    /* 移动端菜单样式 */
+    .menu-toggle { display: flex; }
+    
+    .nav-menu {
+        display: none; /* 默认隐藏 */
+        position: absolute;
+        top: 70px; left: 0; width: 100%;
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+        border-radius: 20px;
+        border: 1px solid var(--glass-border);
+        flex-direction: column;
+        padding: 30px 0;
+        gap: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    
+    .nav-menu.active { display: flex; animation: slideDown 0.3s ease; }
+    
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .big-text { font-size: 42px; }
+    .sub-text { font-size: 16px; margin-bottom: 30px; }
+    
+    .home-visual { width: 90vw; height: 90vw; opacity: 0.5; }
+    
+    .footer-links { flex-direction: column; gap: 15px; }
+}
+/* ================= 新增：内页通用布局 ================= */
+/* 解决导航栏遮挡问题，让内容整体下移 */
+.internal-page {
+    /* 150px = 导航栏Top(30) + 高度(70) + 额外留白(50) */
+    padding-top: 150px !important; 
+    
+    /* 限制内容宽度，防止文字太宽看花了眼，提升阅读体验 */
+    width: 85%;
+    max-width: 1000px;
+    margin: 0 auto; /* 水平居中 */
+    
+    /* 确保内容从上到下自然排列，而不是像首页那样垂直居中 */
+    display: block !important; 
+    min-height: 100vh;
+    padding-bottom: 80px; /* 底部留白 */
+}
+
+/* 内页标题样式优化 */
+.internal-page h1 {
+    font-size: 48px;
+    margin-bottom: 40px;
+    color: var(--brand-color);
+}
+
+.internal-page p {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    color: var(--text-main);
+}
