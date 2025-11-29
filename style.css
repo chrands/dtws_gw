@@ -1,0 +1,367 @@
+:root {
+    /* 白昼：纯净、医疗白 */
+    --bg-color: #ffffff;
+    --text-main: #0d3f44; /* 深青黑 */
+    --text-sub: #5d888d;
+    --brand-color: rgb(0, 153, 168);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --particle-color: rgba(0, 153, 168, 0.6);
+    --particle-connect: rgba(0, 153, 168, 0.15);
+    --card-glow: rgba(0, 153, 168, 0.1);
+}
+
+[data-theme="dark"] {
+    /* 暗夜：深邃、生物荧光 */
+    --bg-color: #050505;
+    --text-main: #ffffff;
+    --text-sub: #a0b1c0; /* 提高对比度 */
+    --brand-color: #00ffea;
+    --glass-bg: rgba(20, 20, 20, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --particle-color: #00ffea;
+    --particle-connect: rgba(0, 255, 234, 0.15);
+    --card-glow: rgba(0, 255, 234, 0.2);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: "Sarasa Gothic SC", "PingFang SC", -apple-system, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    overflow-x: hidden;
+    transition: background-color 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* --- 1. 全屏粒子画布 (底层) --- */
+#particleCanvas {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* --- 2. 悬浮导航岛 (Floating Nav) --- */
+.nav-island {
+    position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
+    width: 90%; max-width: 1200px;
+    height: 70px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 100px;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 30px;
+    z-index: 100;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.nav-logo-img {
+    height: 40px; width: auto; vertical-align: middle;
+}
+
+.nav-menu { display: flex; gap: 40px; }
+
+.nav-link { 
+    font-size: 16px;
+    font-weight: 600; cursor: pointer; color: var(--text-sub); 
+    text-decoration: none;
+    transition: all 0.3s; position: relative;
+}
+
+.nav-link:hover, .nav-link.active { 
+    color: var(--brand-color); 
+    text-shadow: 0 0 10px var(--brand-color);
+}
+
+/* 昼夜切换小圆点 */
+.theme-dot {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 2px solid var(--text-main);
+    cursor: pointer; position: relative; overflow: hidden;
+}
+.theme-dot::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--text-main); 
+    transform: scale(0); transition: transform 0.3s; border-radius: 50%;
+}
+[data-theme="dark"] .theme-dot::after { transform: scale(0.6); }
+
+/* --- 3. 沉浸式内容区 (Scroll Sections) --- */
+.scroll-container {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+}
+
+.section {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 10%;
+    position: relative;
+}
+
+/* 页面切换动画 */
+.page-transition {
+    animation: pageFadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes pageFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 巨型标题排版 */
+.big-text {
+    font-size: clamp(42px, 7vw, 100px);
+    font-weight: 900; line-height: 1.2;
+    margin-bottom: 30px;
+    opacity: 0; transform: translateY(50px);
+    transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+    letter-spacing: 2px;
+}
+
+/* 高亮文字 */
+.highlight-text {
+    color: var(--brand-color);
+    text-shadow: 0 0 15px var(--brand-color);
+}
+
+/* 二维码展示模块 - 优化版 */
+.qrcode-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s;
+}
+
+.section.active .qrcode-container {
+    opacity: 1; transform: translateY(0);
+}
+
+.qrcode-item {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 悬停流光效果 */
+.qrcode-item::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: rotate(45deg);
+    transition: 0.5s;
+    opacity: 0;
+}
+
+.qrcode-item:hover::before {
+    opacity: 1;
+    left: 100%;
+    top: 100%;
+    transition: 1s;
+}
+
+.qrcode-item:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--brand-color);
+    box-shadow: 0 15px 40px var(--card-glow);
+}
+
+.qrcode-image {
+    width: 100%; max-width: 120px; height: auto;
+    margin-bottom: 15px;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.qrcode-item:hover .qrcode-image {
+    transform: scale(1.1);
+}
+
+.qrcode-label {
+    font-size: 16px; font-weight: 600; color: var(--text-main); margin: 0;
+}
+
+/* 首页内容布局 */
+.home-content {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 60px; width: 100%;
+}
+.home-text { flex: 1; max-width: 600px; }
+.home-qrcodes { flex: 0 0 auto; width: 360px; }
+
+/* 二维码放大查看模态框 */
+.modal {
+    display: none; position: fixed; z-index: 1000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    opacity: 0; transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    display: flex; align-items: center; justify-content: center;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 40px; border-radius: 24px;
+    text-align: center;
+    max-width: 90vw; max-height: 90vh;
+    transform: scale(0.8);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+[data-theme="dark"] .modal-content {
+    background-color: #1a1a1a;
+    border: 1px solid var(--brand-color);
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-image {
+    max-width: 100%; max-height: 60vh; margin-bottom: 20px;
+}
+
+.modal-label {
+    font-size: 22px; font-weight: 700; color: #333;
+    margin-bottom: 10px;
+}
+[data-theme="dark"] .modal-label { color: #fff; }
+
+.close-button {
+    position: absolute; top: 15px; right: 20px;
+    font-size: 32px; font-weight: bold; cursor: pointer;
+    color: #999; transition: color 0.3s ease;
+}
+.close-button:hover { color: var(--brand-color); }
+
+/* 玻璃卡片组 */
+.cards-wrapper {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px; width: 100%; margin-top: 50px;
+}
+.glass-card {
+    background: var(--glass-bg); backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 40px; border-radius: 24px;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+.glass-card:hover { 
+    transform: translateY(-12px); 
+    border-color: var(--brand-color);
+    box-shadow: 0 15px 40px var(--card-glow); 
+}
+.glass-card h3 { margin-bottom: 15px; font-size: 24px; color: var(--text-main); }
+.glass-card p { color: var(--text-sub); font-size: 15px; line-height: 1.6; }
+
+/* 按钮 - 流光质感设计 */
+.magnetic-btn {
+    position: relative;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 18px 45px; border-radius: 50px;
+    border: 1px solid var(--glass-border);
+    color: var(--text-main); font-weight: 700;
+    background: rgba(255,255,255,0.05);
+    transition: all 0.3s; cursor: pointer;
+    text-transform: uppercase; letter-spacing: 1px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* 动态光影背景 */
+.magnetic-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
+                var(--brand-color) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1;
+    mix-blend-mode: overlay;
+}
+
+.magnetic-btn:hover::before {
+    opacity: 1;
+}
+
+.magnetic-btn:hover {
+    border-color: var(--brand-color);
+    color: var(--brand-color);
+    box-shadow: 0 0 20px var(--card-glow);
+    transform: translateY(-2px);
+}
+
+/* 底部 ICP 备案 */
+.footer {
+    margin-top: auto;
+    padding: 40px 0;
+    text-align: center;
+    color: var(--text-sub);
+    font-size: 14px;
+    position: relative;
+    z-index: 10;
+}
+.icp-link {
+    color: var(--text-sub);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px dashed transparent;
+}
+.icp-link:hover {
+    color: var(--brand-color);
+    border-bottom-color: var(--brand-color);
+}
+
+/* 移动端适配 */
+@media (max-width: 1024px) {
+    .home-content { flex-direction: column; text-align: center; gap: 40px; }
+    .home-qrcodes { width: 100%; max-width: 400px; }
+}
+
+@media (max-width: 768px) {
+    .nav-island { padding: 0 20px; height: 60px; }
+    .nav-logo-img { height: 32px; }
+    .nav-menu { display: none; } 
+    .big-text { font-size: 42px; }
+    .qrcode-container { gap: 15px; }
+    .qrcode-item { padding: 15px; }
+}
+
+.sub-text {
+    font-size: 20px; color: var(--text-sub); max-width: 600px; line-height: 1.6;
+    margin-bottom: 50px;
+    opacity: 0; transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s;
+}
+
+.section.active .big-text, 
+.section.active .sub-text {
+    opacity: 1; transform: translateY(0);
+}
+
+.scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    font-size: 12px; letter-spacing: 2px; color: var(--text-sub);
+    animation: bounce 2s infinite;
+}
+@keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }

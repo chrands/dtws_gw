@@ -1,0 +1,24 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="white" stroke="#e0e0e0" stroke-width="2"/>
+  <!-- 模拟二维码图案 -->
+  <g fill="#333">
+    <!-- 左上角定位图案 -->
+    <rect x="15" y="15" width="45" height="45"/>
+    <rect x="25" y="25" width="25" height="25" fill="white"/>
+    <!-- 右上角定位图案 -->
+    <rect x="140" y="15" width="45" height="45"/>
+    <rect x="150" y="25" width="25" height="25" fill="white"/>
+    <!-- 左下角定位图案 -->
+    <rect x="15" y="140" width="45" height="45"/>
+    <rect x="25" y="150" width="25" height="25" fill="white"/>
+    <!-- 模拟数据点 -->
+    <rect x="70" y="70" width="15" height="15"/>
+    <rect x="95" y="70" width="15" height="15"/>
+    <rect x="120" y="70" width="15" height="15"/>
+    <rect x="95" y="95" width="15" height="15"/>
+    <rect x="70" y="120" width="15" height="15"/>
+    <rect x="120" y="120" width="15" height="15"/>
+  </g>
+  <!-- 文字说明 -->
+  <text x="100" y="185" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">抖音二维码</text>
+</svg>

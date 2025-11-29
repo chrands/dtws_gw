@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面不存在 - 稻田蛙声</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-main: #0d3f44;
+            --text-sub: #5d888d;
+            --brand-color: rgb(0, 153, 168);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Sarasa Gothic SC", "PingFang SC", -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 80px;
+            font-weight: 900;
+            color: var(--brand-color);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 18px;
+            color: var(--text-sub);
+            max-width: 500px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid var(--brand-color);
+            color: var(--brand-color);
+            font-weight: 700;
+            background: transparent;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background: var(--brand-color);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(0, 153, 168, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 60px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img src="logo.png" alt="DAUTEEN Logo" class="logo">
+    <h1>404</h1>
+    <h2>页面不存在</h2>
+    <p>您访问的页面可能已经被删除、移动或输入了错误的网址。</p>
+    <a href="/" class="btn">返回首页</a>
+</body>
+</html>

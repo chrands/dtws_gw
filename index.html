@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>稻田蛙声 DAUTEEN - 新质诊疗技术传播服务商</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <canvas id="particleCanvas"></canvas>
+
+    <nav class="nav-island">
+        <img src="logo.png" alt="DAUTEEN Logo" class="nav-logo-img">
+        
+        <div class="nav-menu">
+            <a href="about.html" class="nav-link">关于蛙声</a>
+            <a href="news.html" class="nav-link">新闻媒体</a>
+            <a href="contact.html" class="nav-link">联系我们</a>
+        </div>
+        <div class="theme-dot" id="themeToggle"></div>
+    </nav>
+
+    <div class="scroll-container">
+        
+        <section class="section active" id="home">
+            <div class="home-content">
+                <div class="home-text">
+                    <h1 class="big-text">新质诊疗技术<br>传播服务商</h1>
+                    <p class="sub-text">
+                        聚合生命健康的真正答案。稻田蛙声致力于以前沿生物技术与数字化方案，重构医疗诊断的未来边界。
+                    </p>
+                    <div class="magnetic-btn">探索解决方案</div>
+                </div>
+                <div class="home-qrcodes">
+                    <div class="qrcode-container">
+                        <div class="qrcode-item" onclick="openModal('assets/images/qrcodes/service-account-qr.svg', '服务号')">
+                            <img src="assets/images/qrcodes/service-account-qr.svg" alt="服务号二维码" class="qrcode-image">
+                            <p class="qrcode-label">服务号</p>
+                        </div>
+                        <div class="qrcode-item" onclick="openModal('assets/images/qrcodes/official-account-qr.svg', '公众号')">
+                            <img src="assets/images/qrcodes/official-account-qr.svg" alt="公众号二维码" class="qrcode-image">
+                            <p class="qrcode-label">公众号</p>
+                        </div>
+                        <div class="qrcode-item" onclick="openModal('assets/images/qrcodes/video-account-qr.svg', '视频号')">
+                            <img src="assets/images/qrcodes/video-account-qr.svg" alt="视频号二维码" class="qrcode-image">
+                            <p class="qrcode-label">视频号</p>
+                        </div>
+                        <div class="qrcode-item" onclick="openModal('assets/images/qrcodes/douyin-qr.svg', '抖音')">
+                            <img src="assets/images/qrcodes/douyin-qr.svg" alt="抖音二维码" class="qrcode-image">
+                            <p class="qrcode-label">抖音</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">向下滚动探索</div>
+        </section>
+
+        <!-- 二维码放大查看模态框 -->
+        <div id="qrcodeModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeModal()">&times;</span>
+                <img id="modalImage" src="" alt="二维码" class="modal-image">
+                <p id="modalLabel" class="modal-label"></p>
+            </div>
+        </div>
+
+        <section class="section" id="products">
+            <h2 class="big-text" style="font-size: 60px;">核心业务<br>领域</h2>
+            <div class="cards-wrapper">
+                <div class="glass-card">
+                    <h3>01. 精准缝线</h3>
+                    <p>纳米级涂层工艺，专为微创外科手术设计，提供极致的组织愈合体验。</p>
+                </div>
+                <div class="glass-card">
+                    <h3>02. 分子诊断</h3>
+                    <p>高灵敏度检测试剂盒，快速捕捉病理信号，为临床决策提供硬核数据。</p>
+                </div>
+                <div class="glass-card">
+                    <h3>03. 数字医疗</h3>
+                    <p>连接经销商与终端的智能云平台，实时追踪物流与销售数据。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="vision" style="text-align: center; align-items: center;">
+            <h2 class="big-text" style="font-size: 80px;">全球合作<br>网络</h2>
+            <p class="sub-text" style="text-align: center;">
+                我们的足迹遍布全国 30+ 省市，连接 2000+ 医疗机构。<br>
+                在每一个生命需要的地方，都有稻田的守护。
+            </p>
+            <div class="magnetic-btn">加入我们</div>
+        </section>
+
+        <footer class="footer">
+            <p>
+                © 2025 DAUTEEN. All Rights Reserved.<br>
+                <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" class="icp-link">陕ICP备2025078374号</a>
+            </p>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
