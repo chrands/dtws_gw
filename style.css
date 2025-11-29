@@ -90,16 +90,27 @@ body {
 
 .nav-menu { display: flex; gap: 40px; }
 
+/* --- 导航菜单链接优化 --- */
 .nav-link { 
-    font-size: 16px;
-    font-weight: 600; cursor: pointer; color: var(--text-sub); 
+    /* 1. 调大字号 (原 16px -> 现 18px) */
+    font-size: 18px; 
+    
+    /* 2. 加粗字体，防止看起来太细 */
+    font-weight: 700; 
+    
+    /* 3. 颜色统一：平时用次级深色，鼠标放上去变品牌色 */
+    color: var(--text-main); /* 之前是 text-sub (浅灰)，现在改为 text-main (深黑) 更清晰 */
+    
+    cursor: pointer; 
     text-decoration: none;
-    transition: all 0.3s; position: relative;
+    transition: all 0.3s; 
+    position: relative;
+    padding: 5px 0; /* 增加一点点击区域 */
 }
 
 .nav-link:hover, .nav-link.active { 
     color: var(--brand-color); 
-    text-shadow: 0 0 10px var(--brand-color);
+    text-shadow: 0 0 10px var(--particle-connect); /* 加上淡淡的发光 */
 }
 
 /* 昼夜切换小圆点 */
@@ -301,33 +312,29 @@ body {
     
     .footer-links { flex-direction: column; gap: 15px; }
 }
-/* ================= 新增：内页通用布局 ================= */
-/* 解决导航栏遮挡问题，让内容整体下移 */
+/* ================= 修复：内页通用布局 (恢复宽屏) ================= */
 .internal-page {
-    /* 150px = 导航栏Top(30) + 高度(70) + 额外留白(50) */
+    /* 1. 必须保留：防止内容被导航栏挡住 */
     padding-top: 150px !important; 
     
-    /* 限制内容宽度，防止文字太宽看花了眼，提升阅读体验 */
-    width: 85%;
-    max-width: 1000px;
-    margin: 0 auto; /* 水平居中 */
+    /* 2. 改动：恢复全屏宽度，不再限制 1000px */
+    width: 100% !important;
+    max-width: none !important;
     
-    /* 确保内容从上到下自然排列，而不是像首页那样垂直居中 */
+    /* 3. 加上左右留白：跟首页保持一致，防止文字贴着屏幕边缘 */
+    padding-left: 10%;
+    padding-right: 10%;
+    
     display: block !important; 
     min-height: 100vh;
-    padding-bottom: 80px; /* 底部留白 */
+    padding-bottom: 80px;
 }
 
-/* 内页标题样式优化 */
-.internal-page h1 {
-    font-size: 48px;
-    margin-bottom: 40px;
-    color: var(--brand-color);
-}
-
-.internal-page p {
-    font-size: 18px;
-    line-height: 1.8;
-    margin-bottom: 20px;
+/* 确保大标题依然霸气 (之前给你的代码) */
+.internal-page .big-text {
+    font-size: 80px !important;
+    font-weight: 900;
+    margin-bottom: 60px;
     color: var(--text-main);
+    text-align: left; /* 让标题靠左，通常全屏布局靠左更好看，或者你可以删掉这就居中 */
 }
